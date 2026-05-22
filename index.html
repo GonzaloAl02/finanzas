@@ -4,9 +4,6 @@
   <meta charset="UTF-8">
   <title>FINANZAS</title>
 
-  <!-- IMPORTANTE: reemplazá la URL_APPS_SCRIPT abajo con tu URL real de Deploy -->
-  <!-- Ejemplo: https://script.google.com/macros/s/AKfycby...../exec -->
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
   <!-- PWA / iOS standalone -->
@@ -22,33 +19,95 @@
 
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { height: 100%; background: #1a1d20; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
-    body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; padding: env(safe-area-inset-top) 24px env(safe-area-inset-bottom); }
-    .logo { width: 84px; height: 84px; border-radius: 19px; background: #1a1d20; display: flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 800; letter-spacing: -2px; box-shadow: 0 0 0 1px rgba(255,255,255,0.08); }
-    .title { font-size: 12px; font-weight: 800; letter-spacing: 3px; opacity: 0.5; text-transform: uppercase; }
-    .spinner { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,0.15); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: #1a1d20; color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Bloque negro para tapar el área de la barra de estado del iPhone */
+    .status-bar-cover {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: env(safe-area-inset-top, 0px);
+      background: #1a1d20;
+      z-index: 10;
+    }
+
+    /* Splash que se muestra mientras carga */
+    .splash {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 28px; background: #1a1d20; color: #fff;
+      z-index: 5;
+      transition: opacity .4s ease;
+    }
+    .splash.oculto { opacity: 0; pointer-events: none; }
+    .splash .logo {
+      width: 84px; height: 84px; border-radius: 19px;
+      background: #1a1d20;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 60px; font-weight: 800; letter-spacing: -2px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .splash .title { font-size: 12px; font-weight: 800; letter-spacing: 3px; opacity: 0.5; text-transform: uppercase; }
+    .splash .spinner {
+      width: 24px; height: 24px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .fallback { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 24px; right: 24px; text-align: center; font-size: 11px; opacity: 0.4; line-height: 1.6; }
-    .fallback a { color: #fff; opacity: 0.7; }
+
+    /* El iframe que contiene la app */
+    iframe {
+      position: fixed;
+      top: env(safe-area-inset-top, 0px);
+      left: 0; right: 0; bottom: 0;
+      width: 100%;
+      height: calc(100% - env(safe-area-inset-top, 0px));
+      border: 0;
+      background: #f8f9fa;
+      z-index: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="logo">F</div>
-  <div class="title">Finanzas</div>
-  <div class="spinner"></div>
-  <div class="fallback">
-    Si no carga automáticamente,<br>
-    <a id="manual-link" href="#">tocá acá</a>
+  <div class="status-bar-cover"></div>
+
+  <div class="splash" id="splash">
+    <div class="logo">F</div>
+    <div class="title">Finanzas</div>
+    <div class="spinner"></div>
   </div>
+
+  <iframe
+    id="appFrame"
+    src=""
+    allow="clipboard-read; clipboard-write"
+    sandbox="allow-scripts allow-forms allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+    onload="appCargada()">
+  </iframe>
 
   <script>
     // ⚠️ PEGÁ ACÁ TU URL DE APPS SCRIPT (la del Deploy, termina en /exec)
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys1Sh9eTkesR5mhdOappQEYR4AkNeH3UIPWOCXAaQ2fm_Jg_NLqML8PGLkjRqT8QA/exec";
 
-    document.getElementById('manual-link').href = APPS_SCRIPT_URL;
+    // Cargar el iframe (en vez de redirigir la página entera)
+    document.getElementById('appFrame').src = APPS_SCRIPT_URL;
 
-    // Esperamos un toque para que iOS no bloquee el redirect inicial
-    setTimeout(() => { window.location.href = APPS_SCRIPT_URL; }, 600);
+    function appCargada() {
+      // Damos un pequeño respiro extra para que la app termine de renderizar
+      setTimeout(() => {
+        document.getElementById('splash').classList.add('oculto');
+      }, 800);
+    }
+
+    // Si la app tarda demasiado igualmente ocultamos el splash a los 8 segundos
+    setTimeout(() => {
+      document.getElementById('splash').classList.add('oculto');
+    }, 8000);
   </script>
 </body>
 </html>
