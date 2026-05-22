@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>FINANZAS</title>
+
+  <!-- IMPORTANTE: reemplazá la URL_APPS_SCRIPT abajo con tu URL real de Deploy -->
+  <!-- Ejemplo: https://script.google.com/macros/s/AKfycby...../exec -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+
+  <!-- PWA / iOS standalone -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="FINANZAS">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#1a1d20">
+
+  <!-- Íconos SVG embebidos -->
+  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%231a1d20"/><text x="50" y="72" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-weight="800" font-size="68" fill="white" letter-spacing="-2">F</text></svg>'>
+  <link rel="apple-touch-icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180"><rect width="180" height="180" rx="40" fill="%231a1d20"/><text x="90" y="129" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif" font-weight="800" font-size="122" fill="white" letter-spacing="-3">F</text></svg>'>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; background: #1a1d20; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+    body { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; padding: env(safe-area-inset-top) 24px env(safe-area-inset-bottom); }
+    .logo { width: 84px; height: 84px; border-radius: 19px; background: #1a1d20; display: flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 800; letter-spacing: -2px; box-shadow: 0 0 0 1px rgba(255,255,255,0.08); }
+    .title { font-size: 12px; font-weight: 800; letter-spacing: 3px; opacity: 0.5; text-transform: uppercase; }
+    .spinner { width: 24px; height: 24px; border: 2px solid rgba(255,255,255,0.15); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .fallback { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); left: 24px; right: 24px; text-align: center; font-size: 11px; opacity: 0.4; line-height: 1.6; }
+    .fallback a { color: #fff; opacity: 0.7; }
+  </style>
+</head>
+<body>
+  <div class="logo">F</div>
+  <div class="title">Finanzas</div>
+  <div class="spinner"></div>
+  <div class="fallback">
+    Si no carga automáticamente,<br>
+    <a id="manual-link" href="#">tocá acá</a>
+  </div>
+
+  <script>
+    // ⚠️ PEGÁ ACÁ TU URL DE APPS SCRIPT (la del Deploy, termina en /exec)
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbys1Sh9eTkesR5mhdOappQEYR4AkNeH3UIPWOCXAaQ2fm_Jg_NLqML8PGLkjRqT8QA/exec";
+
+    document.getElementById('manual-link').href = APPS_SCRIPT_URL;
+
+    // Esperamos un toque para que iOS no bloquee el redirect inicial
+    setTimeout(() => { window.location.href = APPS_SCRIPT_URL; }, 600);
+  </script>
+</body>
+</html>
